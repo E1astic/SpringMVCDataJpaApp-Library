@@ -4,16 +4,16 @@ public class Person {
 
     private int id;
     private String name;
-    private int yearOfBirth;
+    private int year;
 
     public Person(){
 
     }
 
-    public Person(int id, String name, int yearOfBirth) {
+    public Person(int id, String name, int year) {
         this.id = id;
         this.name = name;
-        this.yearOfBirth = yearOfBirth;
+        this.year = year;
     }
 
     public int getId() {
@@ -32,11 +32,11 @@ public class Person {
         this.name = name;
     }
 
-    public int getYearOfBirth() {
-        return yearOfBirth;
+    public int getYear() {
+        return year;
     }
 
-    public void setYearOfBirth(int yearOfBirth) {
-        this.yearOfBirth = yearOfBirth;
+    public void setYear(int year) {
+        this.year = year;
     }
 }

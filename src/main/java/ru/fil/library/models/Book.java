@@ -1,20 +1,30 @@
 package ru.fil.library.models;
 
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
+
 public class Book {
 
     private int id;
-    private int person_id;
+
+    @NotEmpty(message = "Name should not be empty")
+    @Size(min = 2, max = 40, message = "Length of name should be between 2 and 40 characters")
     private String name;
+
+    @NotEmpty(message = "Author should not be empty")
+    @Size(min = 2, max = 40, message = "Length of author should be between 2 and 40 characters")
     private String author;
+
+    @Max(value = 2025, message = "Year should be less then 2025")
     private int year;
 
     public Book(){
 
     }
 
-    public Book(int id, int person_id, String name, String author, int year) {
+    public Book(int id, String name, String author, int year) {
         this.id = id;
-        this.person_id = person_id;
         this.name = name;
         this.author = author;
         this.year = year;
@@ -26,14 +36,6 @@ public class Book {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public int getPerson_id() {
-        return person_id;
-    }
-
-    public void setPerson_id(int person_id) {
-        this.person_id = person_id;
     }
 
     public String getName() {

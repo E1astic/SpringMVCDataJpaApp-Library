@@ -41,7 +41,6 @@ public class BooksController {
 
         Optional<Person> optional=bookDAO.getOwner(id);
         if(optional.isPresent()) {    // если книга занята
-            System.out.println("is present");
             person=optional.get();
             hasOwner=true;
         }

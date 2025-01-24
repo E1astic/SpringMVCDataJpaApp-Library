@@ -19,7 +19,7 @@
 <div th:if="${books.size()!=0}">
     <p>Books:</p>
     <div th:each="book : ${books}">
-        <a th:text="${book.getName()} + ', ' + ${book.getAuthor()} + ', ' + ${book.getYear()}"></a>
+        <a th:href="@{/books/{id}(id=${book.getId()})}" th:text="${book.getName()} + ', ' + ${book.getAuthor()} + ', ' + ${book.getYear()}"></a>
     </div>
 </div>
 

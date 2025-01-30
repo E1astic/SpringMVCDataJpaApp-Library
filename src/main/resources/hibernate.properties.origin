@@ -1,0 +1,9 @@
+# Data source's info
+hibernate.driver_class=
+hibernate.connection.url=
+hibernate.connection.username=
+hibernate.connection.password=
+
+# Properties for Hibernate
+hibernate.dialect=
+hibernate.show_sql=

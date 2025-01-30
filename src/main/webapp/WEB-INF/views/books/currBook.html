@@ -26,8 +26,8 @@
 </div>
 
 <div th:if="${hasOwner}">
-    <p th:text="'Now this book belongs to ' + ${person.getName()}"></p>
-
+    Now this book belongs to <a th:href="@{/people/{id}(id=${person.getId()})}" th:text="${person.getName()}"></a>
+    <br/>
     <form th:method="PATCH" th:action="@{/books/{id}/delPerson(id=${book.getId()})}">
         <input type="submit" value="Release this book"/>
     </form>

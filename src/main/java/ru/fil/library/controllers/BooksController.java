@@ -39,9 +39,9 @@ public class BooksController {
         boolean hasOwner=false;
         Person person=new Person();
 
-        Optional<Person> optional=bookDAO.getOwner(id);
-        if(optional.isPresent()) {    // если книга занята
-            person=optional.get();
+        Optional<Person> owner=bookDAO.getOwner(id);
+        if(owner.isPresent()) {    // если книга занята
+            person=owner.get();
             hasOwner=true;
         }
         else{
@@ -58,13 +58,14 @@ public class BooksController {
 
     @PatchMapping("/{id}/addPerson")
     public String addPerson(@PathVariable("id") int id, @ModelAttribute("person") Person person){
-        bookDAO.setPersonId(id, person);
+        Person owner=personDAO.getById(person.getId());
+        bookDAO.setOwner(id, owner);
         return "redirect:/books/{id}";
     }
 
     @PatchMapping("/{id}/delPerson")
     public String delPerson(@PathVariable("id") int id){
-        bookDAO.setPersonId(id, null);
+        bookDAO.setOwner(id, null);
         return "redirect:/books/{id}";
     }
 

@@ -1,28 +1,30 @@
 package ru.fil.library.controllers;
 
 import jakarta.validation.Valid;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import ru.fil.library.models.Book;
 import ru.fil.library.models.Person;
 import ru.fil.library.services.BookService;
 import ru.fil.library.services.PersonService;
 import ru.fil.library.utils.PersonValidator;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/people")
 public class PeopleController {
 
     private final PersonService personService;
-    private final BookService bookService;
     private final PersonValidator personValidator;
 
     @Autowired
-    public PeopleController(PersonService personService, BookService bookService, PersonValidator personValidator) {
+    public PeopleController(PersonService personService, PersonValidator personValidator) {
         this.personService = personService;
-        this.bookService = bookService;
         this.personValidator = personValidator;
     }
 
@@ -34,9 +36,8 @@ public class PeopleController {
 
     @GetMapping("/{id}")
     public String getById(@PathVariable("id") int id, Model model){
-        Person person = personService.getById(id);
-        model.addAttribute("person", person);
-        model.addAttribute("books", bookService.getByOwner(person));
+        model.addAttribute("person", personService.getById(id));
+        model.addAttribute("books", personService.getBooksByOwnerId(id));
         return "people/currPerson";
     }
 

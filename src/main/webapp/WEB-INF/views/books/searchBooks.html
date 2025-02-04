@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<form method="GET" th:action="@{/books/findByName}">
+    <label for="name">Enter book's name: </label>
+    <input type="text" name="name" id="name" th:value="${name}">
+    <br/>
+
+    <input type="submit" value="Find">
+</form>
+
+<div th:if="${books.size()==0}">
+    <p style="color:#bd1a1a">There aren't books with that name</p>
+</div>
+
+<div th:if="${books.size()>0}" th:each="book : ${books}">
+    <a th:href="@{/books/{id}(id=${book.getId()})}" th:text="${book.getName()}+', '+${book.getAuthor()}+', '+${book.getYear()}"></a>
+    <div th:if="${book.getOwner()==null}">
+        This book is free
+    </div>
+    <div th:if="${book.getOwner()!=null}">
+        <a th:href="@{/people/{id}(id=${book.getOwner().getId})}" th:text="${book.getOwner().getName()}"></a> has this book now
+    </div>
+    <hr/>
+</div>
+
+</body>
+</html>

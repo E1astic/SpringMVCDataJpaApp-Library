@@ -1,11 +1,15 @@
 package ru.fil.library.services;
 
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.fil.library.models.Book;
 import ru.fil.library.models.Person;
 import ru.fil.library.repositories.PersonRepository;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,10 +18,12 @@ import java.util.Optional;
 public class PersonService {
 
     private final PersonRepository personRepository;
+    private final BookService bookService;
 
     @Autowired
-    public PersonService(PersonRepository personRepository) {
+    public PersonService(PersonRepository personRepository, BookService bookService) {
         this.personRepository = personRepository;
+        this.bookService = bookService;
     }
 
     public List<Person> getAll(){
@@ -30,6 +36,20 @@ public class PersonService {
 
     public Person getByName(String name){
         return personRepository.findByName(name).orElse(null);
+    }
+
+    public List<Book> getBooksByOwnerId(int id){
+        Person owner = personRepository.findById(id).orElse(null);
+        List<Book> books=null;
+        if(owner!=null){
+            books = owner.getBooks();
+            for(Book book: books){
+                if(ChronoUnit.DAYS.between(book.getRentedAt(), LocalDateTime.now())>10){
+                    book.setOverdue(true);
+                }
+            }
+        }
+        return books;
     }
 
     @Transactional
@@ -45,7 +65,12 @@ public class PersonService {
 
     @Transactional
     public void delete(int id){
-        personRepository.deleteById(id);
+        Person deletedPerson= personRepository.findById(id).orElse(null);
+        if(deletedPerson != null){
+            bookService.deleteOwner(deletedPerson);
+            personRepository.delete(deletedPerson);
+        }
+
     }
 
 }

@@ -5,6 +5,12 @@ import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.Date;
+import java.util.List;
+
 @Entity
 @Table(name = "Book")
 public class Book {
@@ -31,6 +37,13 @@ public class Book {
     @ManyToOne
     @JoinColumn(name = "person_id", referencedColumnName = "id")
     private Person owner;
+
+    @Column(name = "rented_at")
+    @Temporal(TemporalType.TIMESTAMP)
+    private LocalDateTime rentedAt;
+
+    @Transient  // это поле не связано с таблицей в БД, Hibernate его игнорирует
+    private boolean isOverdue;
 
     public Book(){
 
@@ -82,5 +95,19 @@ public class Book {
         this.owner = owner;
     }
 
+    public LocalDateTime getRentedAt() {
+        return rentedAt;
+    }
 
+    public void setRentedAt(LocalDateTime rentedAt) {
+        this.rentedAt = rentedAt;
+    }
+
+    public boolean isOverdue() {
+        return isOverdue;
+    }
+
+    public void setOverdue(boolean overdue) {
+        isOverdue = overdue;
+    }
 }

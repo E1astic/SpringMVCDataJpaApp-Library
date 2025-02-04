@@ -2,6 +2,7 @@ package ru.fil.library.controllers;
 
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -11,6 +12,7 @@ import ru.fil.library.models.Person;
 import ru.fil.library.services.BookService;
 import ru.fil.library.services.PersonService;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,9 +30,26 @@ public class BooksController {
     }
 
     @GetMapping()
-    public String getAll(Model model) {
-        model.addAttribute("books", bookService.getAll());
+    public String getAll(@RequestParam(value = "page", required = false) Integer page,
+                         @RequestParam(value = "books_per_page", required = false) Integer booksPerPage,
+                         @RequestParam(value = "sort_by_year",required = false) boolean sortByYear,
+                         Model model) {
+        model.addAttribute("books", bookService.getAll(page, booksPerPage, sortByYear));
         return "books/allBooks";
+    }
+
+    @GetMapping("/search")
+    public String search(Model model){
+        String name=null;
+        model.addAttribute("name", name);
+        return "books/searchBooks";
+    }
+
+    @GetMapping("/findByName")
+    public String findByName(@RequestParam("name") String name,
+                             Model model) {
+        model.addAttribute("books", bookService.findByPrefixName(name));
+        return "books/searchBooks";
     }
 
     @GetMapping("/{id}")

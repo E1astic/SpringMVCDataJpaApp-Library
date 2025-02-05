@@ -48,6 +48,7 @@ public class BooksController {
     @GetMapping("/findByName")
     public String findByName(@RequestParam("name") String name,
                              Model model) {
+        model.addAttribute("name", name);
         model.addAttribute("books", bookService.findByPrefixName(name));
         return "books/searchBooks";
     }
